@@ -1,0 +1,6 @@
+framework module Pods_Auto_dz {
+  umbrella header "Pods-Auto dz-umbrella.h"
+
+  export *
+  module * { export * }
+}
