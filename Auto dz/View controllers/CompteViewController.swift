@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class CompteViewController: UIViewController {
+class CompteViewController: UIViewController, UITextFieldDelegate {
     
     //MARK: - showAfterLogginInViewController
     func showAfterLogginInViewController() {
@@ -57,14 +57,6 @@ class CompteViewController: UIViewController {
         return button
     }()
     
-    private let signOutButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .systemGreen
-        button.setTitleColor(.white, for: .normal)
-        button.setTitle("Log Out", for: .normal)
-        return button
-    }()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,7 +64,9 @@ class CompteViewController: UIViewController {
         view.addSubview(emailField)
         view.addSubview(passwordField)
         view.addSubview(button)
-        view.addSubview(signOutButton)
+        
+        passwordField.delegate = self
+        emailField.delegate = self
         
         view.backgroundColor = .systemPurple
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
@@ -80,9 +74,6 @@ class CompteViewController: UIViewController {
         if FirebaseAuth.Auth.auth().currentUser != nil {
             showAfterLogginInViewController()
             
-            view.addSubview(signOutButton)
-            signOutButton.frame = CGRect(x: 20, y: 150, width: view.frame.size.width-40, height: 52)
-            signOutButton.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
         }
     }
     
@@ -120,6 +111,13 @@ class CompteViewController: UIViewController {
         })
     }
     
+    //MARK:- GET RID OF CLAVIATURE AFTER FILLING INFORMATION 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        emailField.resignFirstResponder()
+        passwordField.resignFirstResponder()
+        return true
+    }
+    
     // MARK:- func showCreateAccount
     func showCreateAccount(email: String, password: String){
         let alert = UIAlertController(title: "Create Account", message: "Would you like to create an account ", preferredStyle: .alert)
@@ -136,13 +134,6 @@ class CompteViewController: UIViewController {
                     return
                 }
                 print("You have signed in")
-                strongSelf.label.isHidden = true
-                strongSelf.emailField.isHidden = true
-                strongSelf.passwordField.isHidden = true
-                strongSelf.button.isHidden = true
-                
-                strongSelf.emailField.resignFirstResponder()
-                strongSelf.passwordField.resignFirstResponder()
             })
         }))
         
@@ -174,24 +165,6 @@ class CompteViewController: UIViewController {
                               height: 50)
         
     }
-    
-    // MARK: - func logOutTapped()
-    @objc func logOutTapped(){
-        do {
-            try FirebaseAuth.Auth.auth().signOut()
-            
-            label.isHidden = false
-            emailField.isHidden = false
-            passwordField.isHidden = false
-            button.isHidden = false
-            
-            signOutButton.removeFromSuperview()
-            
-        }
-        catch {
-            print("An error Accurred")
-        }
-    }
 }
 
 //MARK:- AfterLoginInViewController
@@ -199,7 +172,7 @@ class CompteViewController: UIViewController {
 class AfterLoginInViewController: UIViewController {
     
     
-    func showCompteViewController() {
+    func showCompteViewControllerAfterLogginOut() {
         let vc = storyboard?.instantiateViewController(identifier: "tabBar") as! TabBarViewController
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true)
@@ -221,11 +194,13 @@ class AfterLoginInViewController: UIViewController {
         signOutButton.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
     }
     
+    // MARK: - func logOutTapped()
+    
     @objc func logOutTapped() {
         print("you logged out")
         do {
             try FirebaseAuth.Auth.auth().signOut()
-            showCompteViewController()
+            showCompteViewControllerAfterLogginOut()
             
         }
         catch {
