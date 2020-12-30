@@ -10,6 +10,13 @@ import FirebaseAuth
 
 class CompteViewController: UIViewController {
     
+    //MARK: - showAfterLogginInViewController
+    func showAfterLogginInViewController() {
+        let vc = storyboard?.instantiateViewController(identifier: "other") as! AfterLoginInViewController
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+    
     private let label: UILabel = {
         let label = UILabel()
         label.textAlignment = .center
@@ -71,11 +78,7 @@ class CompteViewController: UIViewController {
         button.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         
         if FirebaseAuth.Auth.auth().currentUser != nil {
-            
-            label.isHidden = true
-            emailField.isHidden = true
-            passwordField.isHidden = true
-            button.isHidden = true
+            showAfterLogginInViewController()
             
             view.addSubview(signOutButton)
             signOutButton.frame = CGRect(x: 20, y: 150, width: view.frame.size.width-40, height: 52)
@@ -88,6 +91,9 @@ class CompteViewController: UIViewController {
         guard let email = emailField.text, !email.isEmpty,
               let password = passwordField.text, !password.isEmpty
         else {
+            let alert = UIAlertController(title: "Textfields are empty", message: "Please, enter your e-mail and password", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alert, animated: true)
             print("Missing data")
             return
         }
@@ -110,14 +116,7 @@ class CompteViewController: UIViewController {
                 return
             }
             print("You have signed in ")
-            strongSelf.label.isHidden = true
-            strongSelf.emailField.isHidden = true
-            strongSelf.passwordField.isHidden = true
-            strongSelf.button.isHidden = true
-            
-            strongSelf.emailField.resignFirstResponder()
-            strongSelf.passwordField.resignFirstResponder()
-            
+            self?.showAfterLogginInViewController()
         })
     }
     
@@ -192,5 +191,51 @@ class CompteViewController: UIViewController {
         catch {
             print("An error Accurred")
         }
+    }
+}
+
+//MARK:- AfterLoginInViewController
+
+class AfterLoginInViewController: UIViewController {
+    
+    
+    func showCompteViewController() {
+        let vc = storyboard?.instantiateViewController(identifier: "tabBar") as! TabBarViewController
+        vc.modalPresentationStyle = .fullScreen
+        present(vc, animated: true)
+    }
+    
+    private let signOutButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemGreen
+        button.setTitleColor(.white, for: .normal)
+        button.setTitle("Log Out", for: .normal)
+        return button
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.addSubview(signOutButton)
+        
+        signOutButton.addTarget(self, action: #selector(logOutTapped), for: .touchUpInside)
+    }
+    
+    @objc func logOutTapped() {
+        print("you logged out")
+        do {
+            try FirebaseAuth.Auth.auth().signOut()
+            showCompteViewController()
+            
+        }
+        catch {
+            print("An error Accurred")
+        }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        signOutButton.frame = CGRect(x: 20, y: 150, width: view.frame.size.width-40, height: 52)
+        
     }
 }

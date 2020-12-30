@@ -63,7 +63,7 @@
         <!--Compte-->
         <scene sceneID="gIs-lC-IWf">
             <objects>
-                <viewController id="umb-Jq-2Sq" customClass="CompteViewController" customModule="Auto_dz" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="compte" id="umb-Jq-2Sq" customClass="CompteViewController" customModule="Auto_dz" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="QgD-sb-7o1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -76,10 +76,25 @@
             </objects>
             <point key="canvasLocation" x="1880" y="605"/>
         </scene>
+        <!--After Login In View Controller-->
+        <scene sceneID="2np-7s-DHA">
+            <objects>
+                <viewController storyboardIdentifier="other" id="S6i-L3-hky" customClass="AfterLoginInViewController" customModule="Auto_dz" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="gBt-Sq-ub7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="Rt3-Ia-mit"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vBM-4C-xtp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2764" y="610"/>
+        </scene>
         <!--Tab Bar View Controller-->
         <scene sceneID="BbL-mz-ACU">
             <objects>
-                <tabBarController id="G9I-vf-I3V" customClass="TabBarViewController" customModule="Auto_dz" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="tabBar" id="G9I-vf-I3V" customClass="TabBarViewController" customModule="Auto_dz" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="nBX-tb-MOh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
